@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ndm-cluster-exporter
+  name: {{ include "clusterExporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   strategy:

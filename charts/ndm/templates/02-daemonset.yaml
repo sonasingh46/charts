@@ -8,11 +8,11 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      name: node-disk-manager
+      name: {{ include "ndm.name" . }}
   template:
     metadata:
       labels:
-        name: node-disk-manager
+        name: {{ include "ndm.name" . }}
     spec:
       # By default the node-disk-manager will be run on all kubernetes nodes
       # If you would like to limit this to only some nodes, say the nodes
@@ -25,10 +25,10 @@ spec:
       # to detect disk attach and detach events using fd.
       hostNetwork: true
       hostPID: true
-      serviceAccountName: openebs-ndm-operator
+      serviceAccountName: {{ include "ndm.serviceAccountName" . }}
       containers:
-        - name: node-disk-manager
-          image: openebs/node-disk-manager-amd64:ci
+        - name: {{ include "ndm.name" . }}
+          image: "{{ quote .Values.image.registry }}{{ quote .Values.image.repository }}:{{ quote .Values.image.tag }}"
           args:
             - -v=4
             - --feature-gates="GPTBasedUUID"
@@ -83,7 +83,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: node-disk-manager-config
+            name: {{ include "ndm.fullname" . }}-config
         - name: udev
           hostPath:
             path: /run/udev

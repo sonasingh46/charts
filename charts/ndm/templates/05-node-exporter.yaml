@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: ndm-node-exporter
+  name: {{ include "nodeExporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   updateStrategy:
     type: RollingUpdate
