@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "nodeExporter.fullname" . }}
+  name: {{ include "ndm.nodeExporter.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   updateStrategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      name: ndm-node-exporter
+      name: {{ .Values.nodeExporter.name  }}
   template:
     metadata:
       labels:
-        name: ndm-node-exporter
+        name: {{ .Values.nodeExporter.name  }}
     spec:
-      serviceAccountName: openebs-ndm-operator
+      serviceAccountName: {{ include "ndm.serviceAccountName" . }}
       containers:
-        - name: node-disk-exporter
-          image: openebs/node-disk-exporter-amd64:ci
+        - name: {{ .Values.nodeExporter.name  }}
+          image: "{{ .Values.nodeExporter.image.registry }}{{ .Values.nodeExporter.image.repository }}:{{ .Values.nodeExporter.image.tag }}"
           command:
             - /usr/local/bin/exporter
           args:

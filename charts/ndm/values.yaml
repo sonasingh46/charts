@@ -4,13 +4,45 @@
 
 replicaCount: 1
 
-image:
-  registry: quay.io
-  repository: openebs/node-disk-manager-amd64
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ci
-
+nodeDiskManager:
+  name: node-disk-manager
+  image:
+    registry:
+    repository: openebs/node-disk-manager-amd64
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ci
+nodeDiskOperator:
+  name: node-disk-operator
+  image:
+    registry:
+    repository: openebs/node-disk-operator-amd64
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ci
+clusterExporter:
+  name: ndm-cluster-exporter
+  image:
+    registry:
+    repository: openebs/node-disk-exporter-amd64
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ci
+nodeExporter:
+  name: ndm-node-exporter
+  image:
+    registry:
+    repository: openebs/node-disk-exporter-amd64
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ci
+cleanupUtil:
+  image:
+    registry:
+    repository: openebs/linux-utils:latest
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ci
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

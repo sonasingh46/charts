@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "ndm.fullname" . }}
+  name: {{ include "ndm.nodeDiskManager.fullname" . }}
   namespace:  {{ .Release.Namespace }}
 spec:
   updateStrategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      name: {{ include "ndm.name" . }}
+      name: {{ .Values.nodeDiskManager.name  }}
   template:
     metadata:
       labels:
-        name: {{ include "ndm.name" . }}
+        name: {{ .Values.nodeDiskManager.name  }}
     spec:
       # By default the node-disk-manager will be run on all kubernetes nodes
       # If you would like to limit this to only some nodes, say the nodes
@@ -27,8 +27,8 @@ spec:
       hostPID: true
       serviceAccountName: {{ include "ndm.serviceAccountName" . }}
       containers:
-        - name: {{ include "ndm.name" . }}
-          image: "{{ quote .Values.image.registry }}{{ quote .Values.image.repository }}:{{ quote .Values.image.tag }}"
+        - name: {{ .Values.nodeDiskManager.name  }}
+          image: "{{ .Values.nodeDiskManager.image.registry }}{{ .Values.nodeDiskManager.image.repository }}:{{ .Values.nodeDiskManager.image.tag }}"
           args:
             - -v=4
             - --feature-gates="GPTBasedUUID"
@@ -83,7 +83,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ include "ndm.fullname" . }}-config
+            name: {{ include "ndm.nodeDiskManager.fullname" . }}-config
         - name: udev
           hostPath:
             path: /run/udev

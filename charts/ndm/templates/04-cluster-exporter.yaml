@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "clusterExporter.fullname" . }}
+  name: {{ include "ndm.clusterExporter.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
@@ -9,16 +9,16 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      name: ndm-cluster-exporter
+      name: {{ .Values.clusterExporter.name  }}
   template:
     metadata:
       labels:
-        name: ndm-cluster-exporter
+        name: {{ .Values.clusterExporter.name  }}
     spec:
-      serviceAccountName: openebs-ndm-operator
+      serviceAccountName: {{ include "ndm.serviceAccountName" . }}
       containers:
-        - name: ndm-cluster-exporter
-          image: openebs/node-disk-exporter-amd64:ci
+        - name: {{ .Values.clusterExporter.name  }}
+          image: "{{ .Values.clusterExporter.image.registry }}{{ .Values.clusterExporter.image.repository }}:{{ .Values.clusterExporter.image.tag }}"
           command:
             - /usr/local/bin/exporter
           args:
